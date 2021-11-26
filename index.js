@@ -10,18 +10,22 @@ require('dotenv').config();
 //CORS
 app.use(cors());
 
+
+//Lectura y parseo del body
+app.use(express.json());
+
+
 //Se inicializa la conexion a la base de datos
 dbConnection();
 
-
-
 //rutas
-app.get('/', (req, res) => {
-    res.status(400).json({
-        ok: true,
-        msg: 'hola mundo'
-    })
-});
+app.use('/api/usuario', require('./routes/usuario'));
+//rutas
+app.use('/api/auth', require('./routes/auth'));
+
+
+
+
 
 
 //mongodb+srv://johan_01:a30522@mycluster.mt4ib.mongodb.net/test
