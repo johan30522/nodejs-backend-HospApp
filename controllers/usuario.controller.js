@@ -162,14 +162,25 @@ const deleteUsuario = async(req = request, res = response) => {
 
 const getLista = async(req = request, res = response) => {
 
+    const desde = Number(req.query.desde || 0);
 
 
-    const usuarios = await Usuario.find({}, 'name email role google');
-
+    /* const usuarios = await Usuario.find({}, 'name email role google')
+         .skip(desde)
+         .limit(2);
+     const total = await Usuario.count();*/
 
     //console.log(token);
+
+    const [usuarios, total] = await Promise.all([
+        Usuario.find({}, 'name email role google')
+        .skip(desde)
+        .limit(2),
+        Usuario.count()
+    ])
     return res.status(200).json({
         ok: true,
+        total,
         usuarios: usuarios
     })
 
