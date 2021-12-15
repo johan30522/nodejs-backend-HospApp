@@ -4,6 +4,8 @@ const Usuario = require('../models/usuario.model');
 const bcrypt = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
 
+const { googleVerify } = require('../helpers/google-verify');
+
 
 const loginUsuario = async(req = request, res = response) => {
 
@@ -51,6 +53,56 @@ const loginUsuario = async(req = request, res = response) => {
 
 }
 
+
+const loginGoogle = async(req = request, res = response) => {
+
+
+    try {
+        const { token } = req.body;
+
+        const { email, name, picture } = await googleVerify(token);
+
+        let usuarioDb = await Usuario.findOne({ email });
+        let usuario;
+        if (!usuarioDb) {
+            usuario = new Usuario({
+                name,
+                email,
+                password: '@@@',
+                img: picture,
+                google: true
+            });
+        } else {
+            usuario = usuarioDb;
+            usuario.google = true;
+            usuario.password = '@@@';
+        }
+        await usuario.save();
+
+        //generar json web token
+        const tokenAuth = await generarJWT(usuario.id, usuario.name);
+
+        return res.status(200).json({
+            ok: true,
+            msj: 'usuario google autenticado',
+            email,
+            name,
+            picture,
+            tokenAuth
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(401).json({
+            ok: false,
+            msj: 'token incorrecto'
+        })
+    }
+
+
+
+}
+
+
 const renewUsuario = async(req = request, res = response) => {
 
     const { uid, name, email } = req;
@@ -83,5 +135,6 @@ const renewUsuario = async(req = request, res = response) => {
 
 module.exports = {
     loginUsuario,
-    renewUsuario
+    renewUsuario,
+    loginGoogle
 }

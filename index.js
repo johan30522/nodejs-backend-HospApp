@@ -18,6 +18,10 @@ app.use(express.json());
 //Se inicializa la conexion a la base de datos
 dbConnection();
 
+//directorio publico
+app.use(express.static('public'));
+
+
 //rutas
 app.use('/api/usuario', require('./routes/usuario'));
 
@@ -30,7 +34,6 @@ app.use('/api/Medicos', require('./routes/medicos'));
 app.use('/api/todo', require('./routes/search'));
 
 app.use('/api/upload', require('./routes/upload'));
-
 
 
 
