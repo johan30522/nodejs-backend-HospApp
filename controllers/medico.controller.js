@@ -51,10 +51,29 @@ const updateMedico = async(req = request, res = response) => {
     try {
 
 
+        let medico = await Medico.findById(uid);
+        if (!medico) {
+
+            return res.status(400).json({
+                ok: false,
+                msj: 'el hospital no existe.'
+            })
+        }
+
+
+        //verifica si el email que se esta actualizanbdo ya existe en la base e datos
+
+        let { name } = req.body;
+
+        console.log(name);
+
+        let medicoUpdated = await Medico.findByIdAndUpdate(uid, { name }, { new: true });
+
+
         return res.status(200).json({
                 ok: true,
                 msj: 'Medico Actualizado',
-
+                hospital: medicoUpdated
             })
             //generar respuesta exitosa
 
@@ -77,6 +96,19 @@ const deleteMedico = async(req = request, res = response) => {
     console.log(req.body);
 
     try {
+
+        //verifica que no exista el correo
+
+        let medico = await Hospital.findById(uid);
+        if (!medico) {
+
+            return res.status(400).json({
+                ok: false,
+                msj: 'el hospital no existe.'
+            })
+        }
+
+        await Medico.findOneAndDelete(uid);
 
         return res.status(200).json({
                 ok: true,
