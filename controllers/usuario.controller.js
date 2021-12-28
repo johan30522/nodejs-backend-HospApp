@@ -61,6 +61,7 @@ const createUsuario = async(req = request, res = response) => {
 const updateUsuario = async(req = request, res = response) => {
 
     let uid = req.params.id;
+    console.log('usuario>>>>');
     console.log(req.body);
 
     try {
@@ -92,10 +93,16 @@ const updateUsuario = async(req = request, res = response) => {
         }
 
 
-        campos.email = email;
 
+
+
+        if (usuario.google) {
+            campos.email = email;
+
+            // delete campos.email;
+        }
         delete campos.role;
-        delete campos.email;
+
 
 
         let userUpdated = await Usuario.findByIdAndUpdate(uid, campos, { new: true });

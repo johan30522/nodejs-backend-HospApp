@@ -91,6 +91,7 @@ const loginGoogle = async(req = request, res = response) => {
             tokenAuth
         })
     } catch (error) {
+        console.log('error');
         console.log(error);
         return res.status(401).json({
             ok: false,
@@ -116,7 +117,7 @@ const renewUsuario = async(req = request, res = response) => {
         })
     }
 
-
+    console.log(usuarioDb);
     //generar json web token
     const token = await generarJWT(uid, name);
 
@@ -125,9 +126,7 @@ const renewUsuario = async(req = request, res = response) => {
     return res.status(200).json({
         ok: true,
         msj: 'renew de usuarios',
-        uid,
-        name,
-        email: usuarioDb.email,
+        usuario: usuarioDb,
         token
     })
 
