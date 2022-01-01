@@ -95,6 +95,7 @@ const getCollection = async(req = request, res = response) => {
 
     res.json({
         ok: true,
+        total: results.length,
         results
     })
 }

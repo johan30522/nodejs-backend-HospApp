@@ -77,7 +77,8 @@ const updateUsuario = async(req = request, res = response) => {
             })
         }
 
-
+        console.log('usuario encontrado>>>>');
+        console.log(usuario);
         //verifica si el email que se esta actualizanbdo ya existe en la base e datos
         let { password, google, email, ...campos } = req.body;
 
@@ -101,7 +102,7 @@ const updateUsuario = async(req = request, res = response) => {
 
             // delete campos.email;
         }
-        delete campos.role;
+        //delete campos.role;
 
 
 
@@ -180,9 +181,9 @@ const getLista = async(req = request, res = response) => {
     //console.log(token);
 
     const [usuarios, total] = await Promise.all([
-        Usuario.find({}, 'name email role google')
+        Usuario.find({}, 'name email role google img')
         .skip(desde)
-        .limit(2),
+        .limit(5),
         Usuario.count()
     ])
     return res.status(200).json({
