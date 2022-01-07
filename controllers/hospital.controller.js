@@ -133,19 +133,30 @@ const deleteHospital = async(req = request, res = response) => {
 
 const getLista = async(req = request, res = response) => {
 
-    const hospitals = await Hospital.find({}, 'name usuario')
-        .populate('usuario', 'name email img');
+    const desde = Number(req.query.desde || 0);
 
 
+    /*
+        const hospitals = await Hospital.find({}, 'name usuario')
+            .populate('usuario', 'name email img');
 
+    */
+
+
+    const [hospitals, total] = await Promise.all([
+        Hospital.find({}, 'name usuario img')
+        .populate('usuario', 'name email img')
+        .skip(desde)
+        .limit(5),
+        Hospital.count()
+    ])
 
     //console.log(token);
     return res.status(200).json({
         ok: true,
+        total,
         hospitals
     })
-
-
 
 }
 

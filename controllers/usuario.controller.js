@@ -193,8 +193,6 @@ const getLista = async(req = request, res = response) => {
     })
 
 
-
-
 }
 
 
