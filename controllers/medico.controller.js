@@ -132,10 +132,7 @@ const deleteMedico = async(req = request, res = response) => {
 
 const getLista = async(req = request, res = response) => {
 
-
-
-
-    const medicos = await Medico.find({}, 'name usuario')
+    const medicos = await Medico.find({}, 'name usuario img')
         .populate('usuario', 'name email img')
         .populate('hospital', 'name email img');
 
