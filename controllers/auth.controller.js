@@ -5,9 +5,10 @@ const bcrypt = require('bcryptjs');
 const { generarJWT } = require('../helpers/jwt');
 
 const { googleVerify } = require('../helpers/google-verify');
+const { getMenu } = require('../helpers/menu-frontEnd');
 
 
-const loginUsuario = async(req = request, res = response) => {
+const loginUsuario = async (req = request, res = response) => {
 
     try {
 
@@ -32,14 +33,15 @@ const loginUsuario = async(req = request, res = response) => {
         }
         //generar json web token
         const token = await generarJWT(usuarioDb.id, usuarioDb.name);
-
+        console.log(usuarioDb.role);
         return res.status(200).json({
             ok: true,
             msj: 'usuario autenticado',
             uid: usuarioDb.id,
             name: usuarioDb.name,
             email: usuarioDb.email,
-            token
+            token,
+            menu: getMenu(usuarioDb.role)
         })
     } catch (error) {
         console.log(error);
@@ -54,7 +56,7 @@ const loginUsuario = async(req = request, res = response) => {
 }
 
 
-const loginGoogle = async(req = request, res = response) => {
+const loginGoogle = async (req = request, res = response) => {
 
 
     try {
@@ -78,17 +80,22 @@ const loginGoogle = async(req = request, res = response) => {
             usuario.password = '@@@';
         }
         await usuario.save();
+        usuarioDb = await Usuario.findOne({ email });
+        console.log(usuarioDb);
 
         //generar json web token
         const tokenAuth = await generarJWT(usuario.id, usuario.name);
 
+        let menu = getMenu(usuarioDb.role);
+        console.log(menu);
         return res.status(200).json({
             ok: true,
             msj: 'usuario google autenticado',
             email,
             name,
             picture,
-            tokenAuth
+            token: tokenAuth,
+            menu
         })
     } catch (error) {
         console.log('error');
@@ -104,7 +111,7 @@ const loginGoogle = async(req = request, res = response) => {
 }
 
 
-const renewUsuario = async(req = request, res = response) => {
+const renewUsuario = async (req = request, res = response) => {
 
     const { uid, name, email } = req;
 
@@ -127,7 +134,8 @@ const renewUsuario = async(req = request, res = response) => {
         ok: true,
         msj: 'renew de usuarios',
         usuario: usuarioDb,
-        token
+        token,
+        menu: getMenu(usuarioDb.role)
     })
 
 }

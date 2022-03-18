@@ -4,12 +4,16 @@ const { check } = require('express-validator');
 const { validaCampos } = require('../middlewares/validar-campos');
 const router = Router();
 const { validaJWT } = require('../middlewares/validar-jwt');
-const { createHospital, deleteHospital, getLista, updateHospital } = require('../controllers/hospital.controller')
+const { createHospital, deleteHospital, getLista, updateHospital, getListaTodo } = require('../controllers/hospital.controller')
 
 //rutas
 router.get('/', [
     validaJWT
 ], getLista);
+
+router.get('/todo', [
+    validaJWT
+], getListaTodo);
 
 router.post('/', [
     check('name')

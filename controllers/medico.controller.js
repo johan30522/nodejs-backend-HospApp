@@ -9,11 +9,11 @@ const createMedico = async(req = request, res = response) => {
     const { name } = req.body;
     let uid = req.uid;
     try {
-
+        console.log('llego aca!!!');
         let medicoDb = new Medico({
             usuario: uid,
             name: req.body.name,
-            hospital: req.body.idHospital
+            hospital: req.body.hospital
         });
         //console.log(req);
 
@@ -46,6 +46,7 @@ const createMedico = async(req = request, res = response) => {
 const updateMedico = async(req = request, res = response) => {
 
     let uid = req.params.id;
+    console.log(`El id es ${uid}`);
     console.log(req.body);
 
     try {
@@ -78,7 +79,7 @@ const updateMedico = async(req = request, res = response) => {
             //generar respuesta exitosa
 
     } catch (error) {
-        console.log(error);
+        console.log('Error');
         return res.status(500).json({
             ok: false,
             msj: 'debe comunicar al administrador'
@@ -132,9 +133,20 @@ const deleteMedico = async(req = request, res = response) => {
 
 const getLista = async(req = request, res = response) => {
 
-    const medicos = await Medico.find({}, 'name usuario img')
+    /* const medicos = await Medico.find({}, 'name usuario img')
+         .populate('usuario', 'name email img')
+         .populate('hospital', 'name email img');*/
+
+    const desde = Number(req.query.desde || 0);
+
+    const [medicos, total] = await Promise.all([
+        Medico.find({}, 'name usuario img')
         .populate('usuario', 'name email img')
-        .populate('hospital', 'name email img');
+        .populate('hospital', 'name email img')
+        .skip(desde)
+        .limit(5),
+        Medico.count()
+    ])
 
 
     //console.log(token);

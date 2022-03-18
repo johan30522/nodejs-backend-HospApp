@@ -39,9 +39,13 @@ const search = async(req = request, res = response) => {
         Medico.find({
 
             name: regexpr
-        })
-
+        }).populate('hospital', 'name email img')
     ])
+
+    console.log(medicos);
+
+
+
 
     return res.status(200).json({
         ok: true,

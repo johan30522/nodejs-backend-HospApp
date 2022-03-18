@@ -15,7 +15,7 @@ router.post('/', [
     check('name')
     .notEmpty().withMessage('El nombre es obligatorio')
     .isLength({ min: 3 }).withMessage('El nombre debe contener al menos 3 caracteres'),
-    check('idHospital', 'El hospital debe de ser valido').isMongoId(),
+    check('hospital', 'El hospital debe de ser valido').isMongoId(),
 
     validaCampos,
     validaJWT

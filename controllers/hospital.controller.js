@@ -158,12 +158,36 @@ const getLista = async(req = request, res = response) => {
         hospitals
     })
 
+
+
 }
+
+const getListaTodo = async(req = request, res = response) => {
+
+    const desde = Number(req.query.desde || 0);
+
+
+    const [hospitals, total] = await Promise.all([
+        Hospital.find({}, 'name usuario img')
+        .populate('usuario', 'name email img'),
+        Hospital.count()
+    ])
+
+    //console.log(token);
+    return res.status(200).json({
+        ok: true,
+        total,
+        hospitals
+    })
+
+}
+
 
 
 module.exports = {
     getLista,
     createHospital,
     updateHospital,
-    deleteHospital
+    deleteHospital,
+    getListaTodo
 }
