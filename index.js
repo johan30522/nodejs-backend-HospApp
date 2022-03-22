@@ -4,6 +4,7 @@ const app = express();
 const { dbConnection } = require('./db/config');
 
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 
@@ -21,7 +22,6 @@ dbConnection();
 //directorio publico
 app.use(express.static('public'));
 
-
 //rutas
 app.use('/api/usuario', require('./routes/usuario'));
 
@@ -37,7 +37,10 @@ app.use('/api/upload', require('./routes/upload'));
 
 
 
-
+// Lo último
+app.get('*', (req, res) => {
+    res.sendFile( path.resolve( __dirname, 'public/index.html' ) );
+});
 
 
 
