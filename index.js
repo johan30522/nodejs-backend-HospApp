@@ -9,7 +9,9 @@ require('dotenv').config();
 
 
 //CORS
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 
 
 //Lectura y parseo del body

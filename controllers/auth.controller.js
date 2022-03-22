@@ -14,7 +14,7 @@ const loginUsuario = async (req = request, res = response) => {
 
         const { email, password } = req.body;
 
-
+        console.log(email, password )
         let usuarioDb = await Usuario.findOne({ email });
         if (!usuarioDb) {
 
